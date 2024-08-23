@@ -92,7 +92,7 @@ speed_col = int(screen_size[0] / 4)
 speed_row = logo_height + int(speed_font_size * 0.3)
 
 units_lbl_font = pygame.font.SysFont(speed_font_name, units_lbl_font_size, True, False)
-units_lbl = units_lbl_font.render("m/s", True, WHITE)
+units_lbl = units_lbl_font.render("mph", True, WHITE)
 units_lbl_col = int(3 * (screen_size[0] / 4))
 units_lbl_row = (speed_row + speed_font_size) - (2 * units_lbl_font_size)
 screen.blit(units_lbl, [units_lbl_col, units_lbl_row])
@@ -137,7 +137,7 @@ def send_serial_cmd(print_prefix, command):
 def initialize_csv_file():
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Timestamp', 'Speed (m/s)'])
+        writer.writerow(['Timestamp', 'Speed (mph)'])
 
 def log_data_to_csv(timestamp, speed):
     with open(csv_file_path, mode='a', newline='') as file:
@@ -189,6 +189,8 @@ while not done:
             screen_bkgnd_color,
             (speed_col, speed_row, screen_size_width - speed_col, speed_font_size),
             0)
+        #converting to mph
+        speed_mph = Ops241_rx_float * 2.23694
         speed_rnd = round(Ops241_rx_float, 1)
         speed_str = str(speed_rnd)
         if speed_rnd < 0:
