@@ -6,6 +6,7 @@ import sys
 from time import *
 from decimal import *
 import serial
+import signal
 import re
 import pygame
 from pygame.locals import *
