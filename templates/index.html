@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Data Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@latest"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        canvas { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Speed Data Dashboard</h1>
+    <canvas id="speedChart"></canvas>
+    <script>
+        // Fetch data from your server endpoint
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('speedChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map(entry => entry.timestamp), // Use timestamps for x-axis labels
+                        datasets: [{
+                            label: 'Speed (m/s)',
+                            data: data.map(entry => entry.speed), // Use speed values for y-axis data
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'time', // Use time scale for x-axis
+                                time: {
+                                    unit: 'minute' // Adjust the time unit as needed (e.g., 'second', 'minute', 'hour')
+                                }
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
