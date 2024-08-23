@@ -44,7 +44,7 @@ signal.signal(signal.SIGTERM, signal_handler)
 # Ops241A module settings
 Ops241A_Speed_Output_Units = ['US','UK','UM','UC']
 Ops241A_Speed_Output_Units_lbl = ['mph','km/h','m/s','cm/s']
-OPS_current_units = 3
+OPS_current_units = 0 #defaulting to mph
 Ops241A_Blanks_Pref_Zero = 'BZ'
 Ops241A_Sampling_Frequency = 'SV'
 Ops241A_Transmit_Power = 'PD'    # miD power
@@ -213,15 +213,15 @@ while not done:
         # Update screen
         pygame.display.flip()
 
-    now = datetime.now()
-    if (last_units_change + interval_timedelta) < now:
-        if OPS_current_units == len(Ops241A_Speed_Output_Units) - 1:
-            OPS_current_units = 0
-        else:
-            OPS_current_units += 1
-        send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units[OPS_current_units])
-        units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl[OPS_current_units], True, WHITE)
-        last_units_change = now
+ #   now = datetime.now()
+  #  if (last_units_change + interval_timedelta) < now:
+ #       if OPS_current_units == len(Ops241A_Speed_Output_Units) - 1:
+ #           OPS_current_units = 0
+ #       else:
+ #           OPS_current_units += 1
+ #       send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units[OPS_current_units])
+ #       units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl[OPS_current_units], True, WHITE)
+ #       last_units_change = now
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
