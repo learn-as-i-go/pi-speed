@@ -192,7 +192,7 @@ while not done:
             0)
         #converting to mph
         speed_mph = Ops241_rx_float * 2.23694
-        speed_rnd = round(Ops241_rx_float, 1)
+        speed_rnd = round(speed_mph, 1)
         speed_str = str(speed_rnd)
         if speed_rnd < 0:
             speed_rend = speed_font.render(speed_str, True, WHITE)
