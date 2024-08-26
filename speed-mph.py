@@ -12,8 +12,8 @@ from pygame.locals import *
 from datetime import datetime, timedelta
 
 # Ops241A module settings:  ftps, dir off, 5Ksps, min -9dB pwr, squelch 5000
-Ops241A_Speed_Output_Units = ['US','UK','UM','UC']
-Ops241A_Speed_Output_Units_lbl = ['mph','km/h','m/s','cm/s']
+Ops241A_Speed_Output_Units = 'US'
+Ops241A_Speed_Output_Units_lbl = 'mph'
 OPS_current_units = 0
 Ops241A_Blanks_Pref_Zero = 'BZ'
 Ops241A_Sampling_Frequency = 'SV'
@@ -109,8 +109,8 @@ def send_serial_cmd(print_prefix, command) :
             
 # Initialize and query Ops241A Module
 print("\nInitializing Ops241A Module")
-send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units[OPS_current_units])
-units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl[OPS_current_units], True, WHITE)    
+send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units)
+units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl, True, WHITE)    
 send_serial_cmd("\nSet Sampling Frequency: ", Ops241A_Sampling_Frequency)
 send_serial_cmd("\nSet Transmit Power: ", Ops241A_Transmit_Power)
 send_serial_cmd("\nSet Threshold Control: ", Ops241A_Threshold_Control)
@@ -162,7 +162,7 @@ while not done:
         pygame.display.flip()
         # Limit to 60 frames per second
 
-"""     now = datetime.now()
+   """  now = datetime.now()
     if (last_units_change + interval_timedelta) < now:
         if OPS_current_units == len(Ops241A_Speed_Output_Units)-1:
             OPS_current_units=0
@@ -170,7 +170,7 @@ while not done:
             OPS_current_units+=1
         send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units[OPS_current_units])
         units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl[OPS_current_units], True, WHITE)    
-        last_units_change = now """
+        last_units_change = now  """
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
