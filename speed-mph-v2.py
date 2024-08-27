@@ -33,17 +33,23 @@ if not os.path.exists(images_folder):
 
 def save_data_to_csv(timestamp, speed_str, image_path):
     # Ensure the relative path is from the images directory
-    relative_image_path = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
+    #relative_image_path = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
     
     # Print statements to verify paths
     print(f"Saving data to CSV:")
-    print(f"Absolute image path: {image_path}")
-    print(f"Relative image path: {relative_image_path}")
+    print(f"image path: {image_path}")
+    #print(f"Relative image path: {relative_image_path}")
     
+    # Write the CSV header if the file is new or empty
+if not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0:
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Timestamp", "Speed (mph)", "Image Path"])
+
     with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow([timestamp, speed_str, relative_image_path])
-    print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={relative_image_path}")
+        writer.writerow([timestamp, speed_str, image_path])
+    print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={image_path}")
 
 
 def get_latest_data():
