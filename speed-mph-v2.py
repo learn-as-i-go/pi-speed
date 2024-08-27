@@ -32,11 +32,19 @@ if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
 def save_data_to_csv(timestamp, speed_str, image_path):
-    relative_image_path = os.path.relpath(image_path, start=os.path.dirname(__file__))
+    # Ensure the relative path is from the images directory
+    relative_image_path = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
+    
+    # Print statements to verify paths
+    print(f"Saving data to CSV:")
+    print(f"Absolute image path: {image_path}")
+    print(f"Relative image path: {relative_image_path}")
+    
     with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow([timestamp, speed_str, relative_image_path])
     print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={relative_image_path}")
+
 
 def get_latest_data():
     latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': 'N/A'}
@@ -55,12 +63,19 @@ def get_historical_data():
             reader = csv.DictReader(file)
             for row in reader:
                 if 'image' in row:
+                    # Ensure the image path is correctly handled
                     row['image'] = os.path.join('images', os.path.basename(row['image']))
                 else:
                     row['image'] = 'N/A'
+                
+                # Print statements to verify paths
+                print(f"Reading data from CSV:")
+                print(f"Image path from CSV: {row['image']}")
+                
                 historical_data.append(row)
-    print(f"Historical data fetched: {historical_data}")
     return historical_data
+
+
 
 
 @app.route('/')
@@ -162,8 +177,10 @@ camera.resolution = (1024, 768)
 camera.rotation = 180
 
 def capture_image(image_path):
+    print(f"Capturing image with path: {image_path}")
     camera.capture(image_path)
     print(f"Photo captured: {image_path}")
+
 
 def send_serial_cmd(print_prefix, command):
     data_for_send_str = command
@@ -224,6 +241,10 @@ while not done:
                 speed_rend = speed_font.render(speed_str, True, RED)
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 image_path = os.path.join('images', f"car_{timestamp}_{speed_str}.jpg")
+                
+                # Print statements to verify paths
+                print(f"Preparing to capture image with path: {image_path}")
+                
                 image_thread = threading.Thread(target=capture_image, args=(image_path,))
                 image_thread.start()
                 
