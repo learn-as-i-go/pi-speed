@@ -13,12 +13,10 @@ import pygame
 from pygame.locals import *
 from datetime import datetime, timedelta
 from picamera import PiCamera
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 # Flask setup
 app = Flask(__name__)
-
-#debugging toggle
 app.debug = True
 
 # Define paths for CSV and images
@@ -28,6 +26,15 @@ images_folder = os.path.join(os.path.dirname(__file__), 'images')
 # Ensure the images folder exists
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
+
+# Ensure CSV file has a header
+def initialize_csv():
+    if not os.path.isfile(csv_file_path):
+        with open(csv_file_path, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Timestamp', 'Speed (mph)', 'image path'])
+
+initialize_csv()
 
 def get_latest_data():
     latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': ''}
@@ -203,7 +210,7 @@ while not done:
             elif speed_rnd > 0:
                 speed_rend = speed_font.render(speed_str, True, RED)
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                image_path = f"images/car_{timestamp}_{speed_str}.jpg"
+                image_path = os.path.join(images_folder, f"car_{timestamp}_{speed_str}.jpg")
                 image_thread = threading.Thread(target=capture_image, args=(image_path,))
                 image_thread.start()
                 
