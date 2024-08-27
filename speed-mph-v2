@@ -7,6 +7,7 @@ from time import *
 from decimal import *
 import serial
 import threading
+import csv
 import re
 import pygame
 from pygame.locals import *
@@ -18,8 +19,8 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 # Define paths for CSV and images
-csv_file_path = 'data.csv'
-images_folder = 'static/images/'
+csv_file_path = 'data/speed_data.csv'
+images_folder = 'images/'
 
 def get_latest_data():
     latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': ''}
@@ -195,7 +196,7 @@ while not done:
             elif speed_rnd > 0:
                 speed_rend = speed_font.render(speed_str, True, RED)
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                image_path = f"static/images/car_{timestamp}_{speed_str}.jpg"
+                image_path = f"images/car_{timestamp}_{speed_str}.jpg"
                 image_thread = threading.Thread(target=capture_image, args=(image_path,))
                 image_thread.start()
                 
