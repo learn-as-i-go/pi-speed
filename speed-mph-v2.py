@@ -24,26 +24,28 @@ app.debug = True
 # Define paths for CSV and images
 csv_file_path = os.path.join(os.path.dirname(__file__), 'data', 'speed_data.csv')
 images_folder = os.path.join(os.path.dirname(__file__), 'images')
+print(csv_file_path)
+print(images_folder)
 
 # Ensure the images folder exists
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
 def save_data_to_csv(timestamp, speed_str, image_path):
-    relative_image_path = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
+    relative_image_path = os.path.relpath(image_path, start=os.path.dirname(__file__))
     with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow([timestamp, speed_str, relative_image_path])
     print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={relative_image_path}")
 
-
 def get_latest_data():
-    latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': ''}
+    latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': 'N/A'}
     if os.path.isfile(csv_file_path):
         with open(csv_file_path, mode='r') as file:
             reader = list(csv.DictReader(file))
             if reader:
                 latest_entry = reader[-1]
+    print(f"Latest data fetched: {latest_entry}")
     return latest_entry
 
 def get_historical_data():
@@ -52,17 +54,25 @@ def get_historical_data():
         with open(csv_file_path, mode='r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                row['image'] = os.path.join('images', os.path.basename(row['image']))
+                if 'image' in row:
+                    row['image'] = os.path.join('images', os.path.basename(row['image']))
+                else:
+                    row['image'] = 'N/A'
                 historical_data.append(row)
+    print(f"Historical data fetched: {historical_data}")
     return historical_data
+
 
 @app.route('/')
 def index():
     latest_data = get_latest_data()
     historical_data = get_historical_data()
+    latest_image_path = os.path.join('images', os.path.basename(latest_data['image']))
+    print(f"Rendering with latest image path: {latest_image_path}")
     return render_template('index.html', latest_timestamp=latest_data['timestamp'],
-                           latest_speed=latest_data['speed'], latest_image=os.path.join('images', os.path.basename(latest_data['image'])),
+                           latest_speed=latest_data['speed'], latest_image=latest_image_path,
                            historical_data=historical_data)
+
 
 def run_flask():
     app.run(host='0.0.0.0', port=80, use_reloader=False)
