@@ -164,16 +164,6 @@ while not done:
         pygame.display.flip()
         # Limit to 60 frames per second
 
-   """  now = datetime.now()
-    if (last_units_change + interval_timedelta) < now:
-        if OPS_current_units == len(Ops241A_Speed_Output_Units)-1:
-            OPS_current_units=0
-        else:
-            OPS_current_units+=1
-        send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units[OPS_current_units])
-        units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl[OPS_current_units], True, WHITE)    
-        last_units_change = now  """
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
