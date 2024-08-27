@@ -3,52 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speed Data Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@latest"></script>
+    <title>Radar Data and Images</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        canvas { max-width: 100%; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .latest, .historical {
+            margin-bottom: 20px;
+        }
+        .image {
+            max-width: 100%;
+            height: auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .data-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h1>Speed Data Dashboard</h1>
-    <canvas id="speedChart"></canvas>
-    <script>
-        // Fetch data from your server endpoint
-        fetch('/data')
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('speedChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.map(entry => entry.timestamp), // Use timestamps for x-axis labels
-                        datasets: [{
-                            label: 'Speed (m/s)',
-                            data: data.map(entry => entry.speed), // Use speed values for y-axis data
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                type: 'time', // Use time scale for x-axis
-                                time: {
-                                    unit: 'minute' // Adjust the time unit as needed (e.g., 'second', 'minute', 'hour')
-                                }
-                            },
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    </script>
+    <h1>Radar Data and Images</h1>
+
+    <!-- Latest Data and Image Section -->
+    <div class="latest">
+        <h2>Latest Data</h2>
+        <p><strong>Timestamp:</strong> {{ latest_timestamp }}</p>
+        <p><strong>Speed:</strong> {{ latest_speed }} mph</p>
+        <p><strong>Image:</strong></p>
+        <img src="{{ latest_image }}" alt="Latest Image" class="image">
+    </div>
+
+    <!-- Historical Data Section -->
+    <div class="historical">
+        <h2>Historical Data</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Speed (mph)</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in historical_data %}
+                <tr>
+                    <td>{{ entry.timestamp }}</td>
+                    <td>{{ entry.speed }}</td>
+                    <td><a href="{{ entry.image }}" target="_blank">View Image</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
