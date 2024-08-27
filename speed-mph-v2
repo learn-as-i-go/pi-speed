@@ -18,8 +18,11 @@ from flask import Flask, render_template
 # Flask setup
 app = Flask(__name__)
 
+#debugging toggle
+app.debug = True
+
 # Define paths for CSV and images
-csv_file_path = 'data/'
+csv_file_path = 'data/speed_data.csv'
 images_folder = 'images/'
 
 def get_latest_data():
