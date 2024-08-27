@@ -242,12 +242,14 @@ while not done:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 image_path = os.path.join('images', f"car_{timestamp}_{speed_str}.jpg")
                 
-                # Print statements to verify paths
-                print(f"Preparing to capture image with path: {image_path}")
-                
+                # Create and start the image capture thread
                 image_thread = threading.Thread(target=capture_image, args=(image_path,))
                 image_thread.start()
                 
+                # Wait for the image capture thread to complete
+                image_thread.join()
+                
+                # Save data after image capture completes
                 save_data_to_csv(timestamp, speed_str, image_path)
             else:
                 speed_rend = speed_font.render(speed_str, True, WHITE)
