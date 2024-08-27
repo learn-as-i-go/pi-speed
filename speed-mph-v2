@@ -19,7 +19,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 # Define paths for CSV and images
-csv_file_path = 'data/speed_data.csv'
+csv_file_path = 'data/'
 images_folder = 'images/'
 
 def get_latest_data():
