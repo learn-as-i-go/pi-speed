@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Import time, decimal, serial, GPIO, reg expr, sys, and pygame modules
+# Import necessary modules
 import os
 import sys
 from time import *
@@ -41,10 +41,10 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
-# Ops241A module settings
+# OPS241A module settings
 Ops241A_Speed_Output_Units = 'US'
 Ops241A_Speed_Output_Units_lbl = 'mph'
-OPS_current_units = 0 #defaulting to mph
+OPS_current_units = 0  # Defaulting to mph
 Ops241A_Blanks_Pref_Zero = 'BZ'
 Ops241A_Sampling_Frequency = 'SV'
 Ops241A_Minimum_Speed = 'R>5\n'
@@ -135,7 +135,6 @@ def send_serial_cmd(print_prefix, command):
             if data_rx_str.find(ser_message_start) != -1:
                 ser_write_verify = True
 
-
 def initialize_csv_file():
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
@@ -172,19 +171,21 @@ command_list = [
     (Ops241A_Blanks_Pref_Zero, "Blanks Preference Zero"),
     (Ops241A_Transmit_Power, "Transmit Power"),
     (Ops241A_Threshold_Control, "Threshold Control"),
-    (Ops241A_Minimum_Speed, "Minimum Speed"),
-    (Ops241A_Module_Information, "Module Information")
+    (Ops241A_Module_Information, "Module Information"),
+    (Ops241A_Minimum_Speed, "Minimum Speed")
 ]
+
 # Main Loop
-initialize_csv_file()
+initialize_csv_file()  # Make sure this function is properly defined above
 last_units_change = datetime.now()
 interval_timedelta = timedelta(seconds=10)
 done = False
+
 while not done:
     speed_available = False
     Ops241_rx_bytes = ser.readline()
     Ops241_rx_bytes_length = len(Ops241_rx_bytes)
-    if (Ops241_rx_bytes_length != 0):
+    if Ops241_rx_bytes_length != 0:
         Ops241_rx_str = str(Ops241_rx_bytes)
         print("RX:" + Ops241_rx_str)
         if Ops241_rx_str.find('{') == -1:
@@ -201,7 +202,7 @@ while not done:
             screen_bkgnd_color,
             (speed_col, speed_row, screen_size_width - speed_col, speed_font_size),
             0)
-        #converting to mph
+        # Converting to mph
         speed_mph = Ops241_rx_float * 2.23694
         speed_rnd = round(speed_mph, 1)
         speed_str = str(speed_rnd)
@@ -224,15 +225,15 @@ while not done:
         # Update screen
         pygame.display.flip()
 
- #   now = datetime.now()
-  #  if (last_units_change + interval_timedelta) < now:
- #       if OPS_current_units == len(Ops241A_Speed_Output_Units) - 1:
- #           OPS_current_units = 0
- #       else:
- #           OPS_current_units += 1
- #       send_serial_cmd("\nSet Speed Output Units: ", Ops241A_Speed_Output_Units[OPS_current_units])
- #       units_lbl = units_lbl_font.render(Ops241A_Speed_Output_Units_lbl[OPS_current_units], True, WHITE)
- #       last_units_change = now
+    # Rotate through commands
+    now = datetime.now()
+    if (last_units_change + interval_timedelta) < now:
+        current_command, description = command_list[current_command_index]
+        send_serial_cmd(f"\nSet {description}: ", current_command)
+        
+        # Update index for next command
+        current_command_index = (current_command_index + 1) % len(command_list)
+        last_units_change = now
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
