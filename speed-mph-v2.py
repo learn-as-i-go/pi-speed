@@ -207,7 +207,7 @@ while not done:
                 image_thread = threading.Thread(target=capture_image, args=(image_path,))
                 image_thread.start()
                 
-                with open(csv_file_path, mode='a', newline='') as file:
+                with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
                     writer = csv.writer(file)
                     writer.writerow([timestamp, speed_str, image_path])
                 print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={image_path}")
