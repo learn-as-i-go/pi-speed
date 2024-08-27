@@ -174,7 +174,7 @@ command_list = [
     (Ops241A_Threshold_Control, "Threshold Control"),
     (Ops241A_Minimum_Speed, "Minimum Speed"),
     (Ops241A_Module_Information, "Module Information")
-
+]
 # Main Loop
 initialize_csv_file()
 last_units_change = datetime.now()
