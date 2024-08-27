@@ -21,7 +21,8 @@ app.debug = True
 
 # Define paths for CSV and images
 csv_file_path = os.path.join(os.path.dirname(__file__), 'data', 'speed_data.csv')
-images_folder = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
+images_folder = os.path.relpath(start=os.path.join(os.path.dirname(__file__), 'images'))
+print(images_folder)
 
 # Ensure the images folder exists
 if not os.path.exists(images_folder):
