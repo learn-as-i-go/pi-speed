@@ -59,8 +59,8 @@ pygame.display.set_caption("OmniPreSense Radar")
 screen_bkgnd_color = (0x30,0x39,0x86)
 screen.fill(screen_bkgnd_color)
 logo = pygame.image.load('/home/pi/OPS241A_RasPiLCD/ops_logo_400x73.jpg')
-screen.blit(logo, (logo_x,1))  # (480-400)/2
 logo_x = (screen_size_width - logo_width)/2
+screen.blit(logo, (logo_x,1))  # (480-400)/2
 
 speed_font_size = 180
 speed_font_name = "Consolas"
