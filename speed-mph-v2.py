@@ -29,6 +29,14 @@ images_folder = os.path.join(os.path.dirname(__file__), 'images')
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
+def save_data_to_csv(timestamp, speed_str, image_path):
+    relative_image_path = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
+    with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow([timestamp, speed_str, relative_image_path])
+    print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={relative_image_path}")
+
+
 def get_latest_data():
     latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': ''}
     if os.path.isfile(csv_file_path):
