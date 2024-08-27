@@ -16,6 +16,7 @@ Ops241A_Speed_Output_Units = 'US'
 Ops241A_Speed_Output_Units_lbl = 'mph'
 OPS_current_units = 0
 Ops241A_Blanks_Pref_Zero = 'BZ'
+Ops241A_Min_Reported_Speed = 'R>5'
 Ops241A_Sampling_Frequency = 'SV'
 Ops241A_Transmit_Power = 'PD'    # miD power
 Ops241A_Threshold_Control = 'MX' # 1000 magnitude-square.  10 as reported
@@ -116,6 +117,7 @@ send_serial_cmd("\nSet Transmit Power: ", Ops241A_Transmit_Power)
 send_serial_cmd("\nSet Threshold Control: ", Ops241A_Threshold_Control)
 #send_serial_cmd("\nModule Information: ", Ops241A_Module_Information)
 send_serial_cmd("\nSet Blanks Preference: ", Ops241A_Blanks_Pref_Zero) 
+send_serial_cmd("\nSet Reported MinSpeed: ", Ops241A_Min_Reported_Speed) 
 #send_serial_cmd("\nModule Information: ", Ops241A_Module_Information)
 
 
