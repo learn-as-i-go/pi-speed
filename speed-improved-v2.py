@@ -42,11 +42,12 @@ signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
 # Ops241A module settings
-Ops241A_Speed_Output_Units = ['US','UK','UM','UC']
-Ops241A_Speed_Output_Units_lbl = ['mph','km/h','m/s','cm/s']
+Ops241A_Speed_Output_Units = 'US'
+Ops241A_Speed_Output_Units_lbl = 'mph'
 OPS_current_units = 0 #defaulting to mph
 Ops241A_Blanks_Pref_Zero = 'BZ'
 Ops241A_Sampling_Frequency = 'SV'
+Ops241A_Minimum_Speed = 'R>5\n'
 Ops241A_Transmit_Power = 'PD'    # miD power
 Ops241A_Threshold_Control = 'MX' # 1000 magnitude-square. 10 as reported
 Ops241A_Module_Information = '??'
@@ -121,8 +122,7 @@ camera = picamera.PiCamera()
 csv_file_path = '/home/pi/OPS241A_RasPiLCD/motion_data.csv'
 
 def send_serial_cmd(print_prefix, command):
-    data_for_send_str = command
-    data_for_send_bytes = str.encode(data_for_send_str)
+    data_for_send_bytes = str.encode(command)
     print(print_prefix, command)
     ser.write(data_for_send_bytes)
     ser_message_start = '{'
@@ -130,10 +130,11 @@ def send_serial_cmd(print_prefix, command):
     while not ser_write_verify:
         data_rx_bytes = ser.readline()
         data_rx_length = len(data_rx_bytes)
-        if (data_rx_length != 0):
+        if data_rx_length != 0:
             data_rx_str = str(data_rx_bytes)
             if data_rx_str.find(ser_message_start) != -1:
                 ser_write_verify = True
+
 
 def initialize_csv_file():
     with open(csv_file_path, mode='w', newline='') as file:
@@ -163,6 +164,16 @@ def capture_image_with_timestamp():
 
 # Start the Flask server in a separate thread
 threading.Thread(target=start_flask_server, daemon=True).start()
+
+# Initialize settings
+current_command_index = 0
+command_list = [
+    (Ops241A_Sampling_Frequency, "Sampling Frequency"),
+    (Ops241A_Blanks_Pref_Zero, "Blanks Preference Zero"),
+    (Ops241A_Transmit_Power, "Transmit Power"),
+    (Ops241A_Threshold_Control, "Threshold Control"),
+    (Ops241A_Minimum_Speed, "Minimum Speed"),
+    (Ops241A_Module_Information, "Module Information")
 
 # Main Loop
 initialize_csv_file()
