@@ -22,8 +22,12 @@ app = Flask(__name__)
 app.debug = True
 
 # Define paths for CSV and images
-csv_file_path = 'data/speed_data.csv'
-images_folder = 'images/'
+csv_file_path = os.path.join(os.path.dirname(__file__), 'data', 'speed_data.csv')
+images_folder = os.path.join(os.path.dirname(__file__), 'images')
+
+# Ensure the images folder exists
+if not os.path.exists(images_folder):
+    os.makedirs(images_folder)
 
 def get_latest_data():
     latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': ''}
