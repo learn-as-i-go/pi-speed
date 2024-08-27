@@ -17,41 +17,35 @@ from flask import Flask, render_template, request
 
 # Flask setup
 app = Flask(__name__)
+
+# Debugging toggle
 app.debug = True
 
 # Define paths for CSV and images
 csv_file_path = os.path.join(os.path.dirname(__file__), 'data', 'speed_data.csv')
 images_folder = os.path.join(os.path.dirname(__file__), 'images')
-print(images_folder)
 
 # Ensure the images folder exists
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
-# Ensure CSV file has a header
-def initialize_csv():
-    if not os.path.isfile(csv_file_path):
-        with open(csv_file_path, mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Timestamp', 'Speed (mph)', 'image path'])
-
-initialize_csv()
-
 def get_latest_data():
     latest_entry = {'timestamp': 'N/A', 'speed': 'N/A', 'image': ''}
-    with open(csv_file_path, mode='r') as file:
-        reader = list(csv.DictReader(file))
-        if reader:
-            latest_entry = reader[-1]
+    if os.path.isfile(csv_file_path):
+        with open(csv_file_path, mode='r') as file:
+            reader = list(csv.DictReader(file))
+            if reader:
+                latest_entry = reader[-1]
     return latest_entry
 
 def get_historical_data():
     historical_data = []
-    with open(csv_file_path, mode='r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            row['image'] = os.path.join(images_folder, os.path.basename(row['image']))
-            historical_data.append(row)
+    if os.path.isfile(csv_file_path):
+        with open(csv_file_path, mode='r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                row['image'] = os.path.join('images', os.path.basename(row['image']))
+                historical_data.append(row)
     return historical_data
 
 @app.route('/')
@@ -59,7 +53,7 @@ def index():
     latest_data = get_latest_data()
     historical_data = get_historical_data()
     return render_template('index.html', latest_timestamp=latest_data['timestamp'],
-                           latest_speed=latest_data['speed'], latest_image=os.path.join(images_folder, os.path.basename(latest_data['image'])),
+                           latest_speed=latest_data['speed'], latest_image=os.path.join('images', os.path.basename(latest_data['image'])),
                            historical_data=historical_data)
 
 def run_flask():
@@ -211,14 +205,11 @@ while not done:
             elif speed_rnd > 0:
                 speed_rend = speed_font.render(speed_str, True, RED)
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                image_path = os.path.join(images_folder, f"car_{timestamp}_{speed_str}.jpg")
+                image_path = os.path.join('images', f"car_{timestamp}_{speed_str}.jpg")
                 image_thread = threading.Thread(target=capture_image, args=(image_path,))
                 image_thread.start()
                 
-                with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
-                    writer = csv.writer(file)
-                    writer.writerow([timestamp, speed_str, image_path])
-                print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={image_path}")
+                save_data_to_csv(timestamp, speed_str, image_path)
             else:
                 speed_rend = speed_font.render(speed_str, True, WHITE)
 
