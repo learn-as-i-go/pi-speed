@@ -81,8 +81,8 @@ ser = serial.Serial(
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
     bytesize=serial.EIGHTBITS,
-    timeout=1,
-    writeTimeout=2
+    timeout=2,  # Increased timeout
+    writeTimeout=3
 )
 ser.flushInput()
 ser.flushOutput()
@@ -135,14 +135,19 @@ send_serial_cmd("\nSet Threshold Control: ", Ops241A_Threshold_Control)
 send_serial_cmd("\nSet Blanks Preference: ", Ops241A_Blanks_Pref_Zero)
 send_serial_cmd("\nSet Reported MinSpeed: ", Ops241A_Min_Reported_Speed)
 
-# Main loop
 done = False
 while not done:
-    speed_available = False
-    Ops241_rx_bytes = ser.readline()
-    if len(Ops241_rx_bytes) != 0:
+    speed_available = False  # Reset for each iteration
+    try:
+        Ops241_rx_bytes = ser.readline()
+        
+        if len(Ops241_rx_bytes) == 0:
+            print("No data received from OPS241A")
+            continue
+        
         Ops241_rx_str = str(Ops241_rx_bytes)
         print("RX:" + Ops241_rx_str)
+        
         if Ops241_rx_str.find('{') == -1:
             try:
                 Ops241_rx_float = float(Ops241_rx_bytes)
@@ -151,31 +156,40 @@ while not done:
                 print("Unable to convert to a number: " + Ops241_rx_str)
                 speed_available = False
 
-    if speed_available:
-        pygame.draw.rect(screen, screen_bkgnd_color,
-                         (speed_col, speed_row, screen_size_width - speed_col, speed_font_size), 0)
-        speed_rnd = round(Ops241_rx_float, 1)
-        speed_str = str(speed_rnd)
-        if speed_rnd < 0:
-            speed_rend = speed_font.render(speed_str, True, WHITE)
-        elif speed_rnd > 0:
-            speed_rend = speed_font.render(speed_str, True, RED)
-            # Create a thread to handle image capture
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            image_path = f"/home/pi/OPS241A_RasPiLCD/images/car_{timestamp}_{speed_str}.jpg"
-            image_thread = threading.Thread(target=capture_image, args=(image_path,))
-            image_thread.start()
+        if speed_available:
+            pygame.draw.rect(screen, screen_bkgnd_color,
+                             (speed_col, speed_row, screen_size_width - speed_col, speed_font_size), 0)
+            speed_rnd = round(Ops241_rx_float, 1)
+            speed_str = str(speed_rnd)
             
-            # Save the data to the CSV file
-            with open(csv_file_path, mode='a', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow([timestamp, speed_str, image_path])
-            print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={image_path}")
-        else:
-            speed_rend = speed_font.render(speed_str, True, WHITE)
+            if speed_rnd < 0:
+                speed_rend = speed_font.render(speed_str, True, WHITE)
+            elif speed_rnd > 0:
+                speed_rend = speed_font.render(speed_str, True, RED)
+                # Create a thread to handle image capture
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                image_path = f"/home/pi/OPS241A_RasPiLCD/images/car_{timestamp}_{speed_str}.jpg"
+                image_thread = threading.Thread(target=capture_image, args=(image_path,))
+                image_thread.start()
+                
+                # Save the data to the CSV file
+                with open(csv_file_path, mode='a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([timestamp, speed_str, image_path])
+                print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={image_path}")
+            else:
+                speed_rend = speed_font.render(speed_str, True, WHITE)
 
-        screen.blit(speed_rend, [speed_col, speed_row])
-        screen.blit(units_lbl, [units_lbl_col, units_lbl_row])
+            screen.blit(speed_rend, [speed_col, speed_row])
+            screen.blit(units_lbl, [units_lbl_col, units_lbl_row])
+
+            # Update screen
+            pygame.display.flip()
+
+    except serial.SerialException as e:
+        print(f"Serial exception: {e}")
+        ser.flushInput()  # Clear the buffer and try again
+        continue
 
         # Update screen
         pygame.display.flip()
