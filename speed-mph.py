@@ -117,7 +117,7 @@ send_serial_cmd("\nSet Transmit Power: ", Ops241A_Transmit_Power)
 send_serial_cmd("\nSet Threshold Control: ", Ops241A_Threshold_Control)
 #send_serial_cmd("\nModule Information: ", Ops241A_Module_Information)
 send_serial_cmd("\nSet Blanks Preference: ", Ops241A_Blanks_Pref_Zero) 
-send_serial_cmd("\nSet Reported MinSpeed: ", Ops241A_Min_Reported_Speed) 
+send_serial_cmd("\nSet Reported MinSpeed: ", Ops241A_Min_Reported_Speed,"\n") 
 #send_serial_cmd("\nModule Information: ", Ops241A_Module_Information)
 
 
