@@ -13,3 +13,5 @@ python script executed
 script started at Wed 28 Aug 2024 11:32:40 AM EDT
 Environment variables set
 Directory changed to /home/pi/OPS241A_RasPiLCD
+
+printenv > /home/pi/OPS241A_RasPiLCD/cron-env.txt
