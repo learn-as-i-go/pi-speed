@@ -138,7 +138,7 @@ logo_width = 400
 use_LCD = True
 if use_LCD:
     os.environ['SDL_VIDEODRIVER'] = 'fbcon'
-    os.environ["SDL_FBDEV"] = "/dev/fb1"
+    os.environ["SDL_FBDEV"] = "/dev/fb0"
     screen_size = (480, 320)
 else:
     print("Not configured for TFT display")
