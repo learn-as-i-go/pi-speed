@@ -46,8 +46,7 @@
         <p><strong>Speed:</strong> {{ latest_speed }} mph</p>
         <p><strong>Image:</strong></p>
         <img src="{{ url_for('static', filename='images/' + latest_image) }}" alt="Latest Image">
-       <!-- <img src="{{ url_for('static', filename='' + latest_image) }}" alt="Latest Image">-->
-
+        <img src="{{ url_for('static', filename='' + latest_image) }}" alt="Latest Image">
     </div>
 
     <!-- Historical Data Section -->
