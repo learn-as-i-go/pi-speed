@@ -46,7 +46,6 @@
         <p><strong>Speed:</strong> {{ latest_speed }} mph</p>
         <p><strong>Image:</strong></p>
         <img src="{{ url_for('static', filename='images/' + latest_image) }}" alt="Latest Image">
-        <img src="{{ url_for('static', filename='' + latest_image) }}" alt="Latest Image">
     </div>
 
     <!-- Historical Data Section -->
@@ -63,13 +62,14 @@
             <tbody>
                 {% for entry in historical_data %}
                 <tr>
-                    <td>{{ entry.timestamp }}</td>
-                    <td>{{ entry.speed }}</td>
-                    <td><a href="{{ url_for('static', filename='' + entry.image) }}" target="_blank">View Image</a></td>
+                    <td>{{ entry['Timestamp'] }}</td>
+                    <td>{{ entry['Speed (mph)'] }}</td>
+                    <td><a href="{{ url_for('static', filename='images/' + entry['image']) }}" target="_blank">View Image</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    
 </body>
 </html>
