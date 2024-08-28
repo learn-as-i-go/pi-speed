@@ -137,6 +137,21 @@ logo_width = 400
 
 use_LCD = True
 if use_LCD:
+    # Get screen width and height
+    screen_info = pygame.display.Info()
+    screen_width, screen_height = screen_info.current_w, screen_info.current_h
+
+    # Define your pygame window size
+    window_width = 400  # Adjust as needed
+    window_height = 300  # Adjust as needed
+
+    # Calculate the x position for the right side
+    x_position = screen_width - window_width
+
+    # Set the environment variable to position the window
+    os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x_position},0"  # Puts it at the right side, top of the screen
+
+
     os.environ['SDL_VIDEODRIVER'] = 'fbcon'
     os.environ["SDL_FBDEV"] = "/dev/fb0"
     screen_size = (480, 320)
@@ -151,7 +166,9 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
-screen = pygame.display.set_mode(screen_size)
+#screen = pygame.display.set_mode(screen_size)
+screen = pygame.display.set_mode((window_width, window_height))
+
 screen_size_width = screen_size[0]
 screen_size_height = screen_size[1]
 units_lbl_font_size = int(screen_size_width / 10)
