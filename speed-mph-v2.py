@@ -15,6 +15,10 @@ from datetime import datetime, timedelta
 from picamera import PiCamera
 from flask import Flask, render_template, request
 
+print(f"#########################")
+print(f"#########################")
+print(f"###    Script is starting now!")
+print(f"###    ")
 # Flask setup
 app = Flask(__name__)
 
@@ -126,7 +130,7 @@ signal.signal(signal.SIGTERM, shutdown_server)
 Ops241A_Speed_Output_Units = 'US'
 Ops241A_Speed_Output_Units_lbl = 'mph'
 Ops241A_Blanks_Pref_Zero = 'BZ'
-Ops241A_Min_Reported_Speed = 'R>5\n'
+Ops241A_Min_Reported_Speed = 'R>2\n'
 Ops241A_Sampling_Frequency = 'SX' #was SV
 Ops241A_Transmit_Power = 'PD'    # mid power
 Ops241A_Threshold_Control = 'MX' # 1000 magnitude-square
@@ -192,7 +196,7 @@ ser.flushOutput()
 
 camera = PiCamera()
 camera.resolution = (1024, 768)
-camera.rotation = 180
+camera.rotation = 0
 
 def capture_image(image_path):
     print(f"Capturing image to following path: {image_path}")
