@@ -19,26 +19,25 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # Debugging toggle
-app.debug = True
+app.debug = False
 
 # Define paths for CSV and images
 csv_file_path = os.path.join(os.path.dirname(__file__), 'data', 'speed_data.csv')
 images_folder = os.path.join(os.path.dirname(__file__), 'static','images')
-print(csv_file_path)
-print(images_folder)
+print("CSV file path: {csv_file_path}")
+print("Image folder path: {images_folder}")
 
 # Ensure the images folder exists
 if not os.path.exists(images_folder):
     os.makedirs(images_folder)
 
 def save_data_to_csv(timestamp, speed_str, image_path):
-    # Ensure the relative path is from the images directory
-    #relative_image_path = os.path.relpath(image_path, start=os.path.join(os.path.dirname(__file__), 'images'))
-    
+       
     # Print statements to verify paths
-    print(f"Saving data to CSV:")
-    print(f"image path: {image_path}")
-    #print(f"Relative image path: {relative_image_path}")
+    print(f"#########################")
+    print(f"Saving data to CSV method called")
+    print(f"#########################")
+    print(f"Saving image to: {image_path}")
     
     # Write the CSV header if the file is new or empty
     if not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0:
@@ -192,7 +191,7 @@ camera.resolution = (1024, 768)
 camera.rotation = 180
 
 def capture_image(image_path):
-    print(f"Capturing image with path: {image_path}")
+    print(f"Capturing image to following path: {image_path}")
     camera.capture(image_path)
     print(f"Photo captured: {image_path}")
 
@@ -254,17 +253,15 @@ while not done:
                 speed_rend = speed_font.render(speed_str, True, WHITE)
             elif speed_rnd > 0:
                 speed_rend = speed_font.render(speed_str, True, RED)
+                
+                # Capture timestamp and image path before capturing the image
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                image_path = os.path.join('images', f"car_{timestamp}_{speed_str}.jpg")
+                image_path = os.path.join(images_folder, f"car_{timestamp}_{speed_str}.jpg")
                 
-                # Create and start the image capture thread
-                image_thread = threading.Thread(target=capture_image, args=(image_path,))
-                image_thread.start()
+                # Capture image synchronously
+                capture_image(image_path)
                 
-                # Wait for the image capture thread to complete
-                image_thread.join()
-                
-                # Save data after image capture completes
+                # Save data to CSV
                 save_data_to_csv(timestamp, speed_str, image_path)
             else:
                 speed_rend = speed_font.render(speed_str, True, WHITE)
