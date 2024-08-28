@@ -1,0 +1,15 @@
+script started at Wed 28 Aug 2024 10:53:13 AM EDT
+Environment variables set
+Directory changed to /home/pi/OPS241A_RasPiLCD
+python script executed
+script started at Wed 28 Aug 2024 11:00:12 AM EDT
+Environment variables set
+Directory changed to /home/pi/OPS241A_RasPiLCD
+python script executed
+script started at Wed 28 Aug 2024 11:26:27 AM EDT
+Environment variables set
+Directory changed to /home/pi/OPS241A_RasPiLCD
+python script executed
+script started at Wed 28 Aug 2024 11:32:40 AM EDT
+Environment variables set
+Directory changed to /home/pi/OPS241A_RasPiLCD
