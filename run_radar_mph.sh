@@ -13,7 +13,10 @@ cd /home/pi/OPS241A_RasPiLCD
 
 echo "Directory changed to $(pwd)" >> /home/pi/OPS241A_RasPiLCD/cron-log.txt
 
+#verify Python version
+python3 --version >> /home/pi/OPS241A_RasPiLCD/cron-log.txt 2>&1
+
 #run script
-sudo /usr/bin/python3 /home/pi/OPS241A_RasPiLCD/speed-mph-v2.py > /home/pi/OPS241A_RasPiLCD/speed-mph-v2.log 2>&1
+sudo /usr/bin/python3 /home/pi/OPS241A_RasPiLCD/speed-mph-v2.py >> /home/pi/OPS241A_RasPiLCD/speed-mph-v2.log 2>&1
 
 echo "python script executed" >> /home/pi/OPS241A_RasPiLCD/cron-log.txt
