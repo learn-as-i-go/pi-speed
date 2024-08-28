@@ -1,5 +1,7 @@
 #!/bin/bash
 
+printenv > /home/pi/OPS241A_RasPiLCD/cron-env.txt
+
 echo "script started at $(date)" >> /home/pi/OPS241A_RasPiLCD/cron-log.txt
 
 #set environment variables (adjust as needed)
