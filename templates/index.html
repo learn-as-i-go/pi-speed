@@ -65,7 +65,7 @@
                 <tr>
                     <td>{{ entry.timestamp }}</td>
                     <td>{{ entry.speed }}</td>
-                    <td><a href="{{ entry.image }}" target="_blank">View Image</a></td>
+                    <td><a href="{{ url_for('static', filename='' + entry.image) }}" target="_blank">View Image</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

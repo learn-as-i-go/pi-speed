@@ -83,7 +83,7 @@ def get_historical_data():
                     row['image'] = row.get('Image Path', 'N/A')
 
                 # Print statements to verify paths
-                print(f"Reading historical data from CSV: (blank on purpose)")
+                print(f"Reading historical data from CSV: {row['Timestamp']}, {row['Speed (mph)']}, {row['image']}")
                 print(f"Historical image path from CSV: {row['image']}")
                 
                 historical_data.append(row)
