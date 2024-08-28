@@ -226,6 +226,8 @@ flask_thread = threading.Thread(target=run_flask)
 flask_thread.daemon = True
 flask_thread.start()
 
+speed_available = False  # Initialize the variable
+
 # Main loop
 done = False
 while not done:
