@@ -72,13 +72,13 @@ def get_historical_data():
             for row in reader:
                 if 'image' in row:
                     # Ensure the image path is correctly handled
-                    row['image'] = row['image']
+                    line_img = row['image']
                 else:
                     row['image'] = 'N/A'
                 
                 # Print statements to verify paths
                 print(f"Reading historical data from CSV: (blank on purpose)")
-                print(f"Historical image path from CSV: {row['image']}")
+                print(f"Historical image path from CSV: {line_img}")
                 
                 historical_data.append(row)
     return historical_data
