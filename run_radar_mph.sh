@@ -3,7 +3,7 @@
 echo "script started at $(date)" >> /home/pi/OPS241A_RasPiLCD/cron-log.txt
 
 #set environment variables (adjust as needed)
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:home/pi/.local/bin
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/home/pi/.local/bin
 export PYTHONPATH=/usr/lib/python3/dist-packages
 
 echo "Environment variables set" >> /home/pi/OPS241A_RasPiLCD/cron-log.txt
