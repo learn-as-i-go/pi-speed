@@ -91,8 +91,8 @@ def index():
     latest_data = get_latest_data()
     historical_data = get_historical_data()
     #latest_image_path = os.path.join('images', os.path.basename(latest_data['image']))
-    print(f"latest_image_path trying to send to index.html will be {latest_image_path}")
     latest_image_path = latest_data['image']
+    print(f"latest_image_path trying to send to index.html will be {latest_image_path}")
     print(f"Rendering with latest image path: {latest_image_path}")
     return render_template('index.html', latest_timestamp=latest_data['timestamp'],
                            latest_speed=latest_data['speed'], latest_image=latest_image_path,
