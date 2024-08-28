@@ -23,7 +23,7 @@ app.debug = True
 
 # Define paths for CSV and images
 csv_file_path = os.path.join(os.path.dirname(__file__), 'data', 'speed_data.csv')
-images_folder = os.path.join(os.path.dirname(__file__), 'images')
+images_folder = os.path.join(os.path.dirname(__file__), 'static','images')
 print(csv_file_path)
 print(images_folder)
 
