@@ -70,18 +70,23 @@ def get_historical_data():
         with open(csv_file_path, mode='r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                if 'image' in row:
+                # Ensure the required keys exist in the row
+                if 'Timestamp' in row and 'Speed (mph)' in row and 'Image Path' in row:
                     # Ensure the image path is correctly handled
-                    line_img = row['image']
+                    row['image'] = row['Image Path'] if row['Image Path'] else 'N/A'
                 else:
-                    row['image'] = 'N/A'
-                
+                    # If any key is missing, set to 'N/A'
+                    row['Timestamp'] = row.get('Timestamp', 'N/A')
+                    row['Speed (mph)'] = row.get('Speed (mph)', 'N/A')
+                    row['image'] = row.get('Image Path', 'N/A')
+
                 # Print statements to verify paths
                 print(f"Reading historical data from CSV: (blank on purpose)")
-                print(f"Historical image path from CSV: {line_img}")
+                print(f"Historical image path from CSV: {row['image']}")
                 
                 historical_data.append(row)
     return historical_data
+
 
 
 
