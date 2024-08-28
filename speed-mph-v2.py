@@ -41,15 +41,17 @@ def save_data_to_csv(timestamp, speed_str, image_path):
     #print(f"Relative image path: {relative_image_path}")
     
     # Write the CSV header if the file is new or empty
-if not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0:
-    with open(csv_file_path, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Timestamp", "Speed (mph)", "Image Path"])
+    if not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0:
+        with open(csv_file_path, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Timestamp", "Speed (mph)", "Image Path"])
 
+    # Append the new data to the CSV file
     with open(csv_file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow([timestamp, speed_str, image_path])
     print(f"Data saved: Timestamp={timestamp}, Speed={speed_str}, Image={image_path}")
+
 
 
 def get_latest_data():
